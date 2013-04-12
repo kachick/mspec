@@ -20,7 +20,11 @@ class VersionGuard < SpecGuard
 
   def match?
     if Range === @version
-      @version.include? ruby_version
+      if @version.respond_to? :cover?
+        @version.cover? ruby_version
+      else
+        @version.include? ruby_version
+      end
     else
       ruby_version >= @version
     end
